@@ -13,6 +13,4 @@ def index():
 def canvas():
     return render_template('canvas.html')
 
-@main.route('/test')
-def test():
-    return render_template('canvas2.html')
+
