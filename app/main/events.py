@@ -1,13 +1,14 @@
 from flask import session, request
 from flask.ext.socketio import emit, join_room, leave_room, rooms
 from .. import socketio
+from random import randint
 
 
 
 #draw
 @socketio.on('inbound', namespace='/')
 def draw(message):
-    emit('draw', {'user': 'test user', 'data':message}, broadcast=True)
+    emit('draw', {'user': request.sid, 'data':message}, broadcast=True)
 
 
 #clear
@@ -15,13 +16,13 @@ def draw(message):
 def clear(message):
     emit('clearCanvas', {}, broadcast=True)
 
-#headcount
+    
+#join
 @socketio.on('present', namespace="/")
-def headcount(message):
-    _id = request.sid
-    emit('headcount', {'id':_id}, broadcast=True)
-
+def present(message):
+    emit('assignId', {'socketId':request.sid}, broadcast=True)
 
 @socketio.on('left', namespace="/")
 def left(message):
     pass
+

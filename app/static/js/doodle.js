@@ -2,6 +2,8 @@
  * http://www.robodesign.ro
  */
 var context;
+var mySocketId;
+var activeUsers = [];
 
 
 // Keep everything in anonymous function, called on window load.
@@ -68,6 +70,8 @@ if(window.addEventListener) {
       this.mousemove = function (ev) {
         if (tool.started) {
           
+          
+          
           //draw the coordinates
           context.beginPath();
           
@@ -92,6 +96,7 @@ if(window.addEventListener) {
           
           
         }
+        
       };
       
       
@@ -158,11 +163,14 @@ function clearCanvas () {
 var socket;
 $(document).ready(function(){
     socket = io.connect('http://' + document.domain + ':' + location.port + '/');
-    var activeUsers = [];
+    
     socket.emit('present', {});
     socket.on('draw', function(data) {
+      
         
-        document.querySelector('.socketInfo').innerHTML = 'someone is doodling!';
+        var dt = new Date();
+        var utcDate = dt.toUTCString();
+        document.querySelector('.socketInfo').innerHTML = 'someone doodled at: ' + utcDate;
         function drawStuff(item) {
             context.beginPath();
             var color = item[0];
@@ -181,18 +189,16 @@ $(document).ready(function(){
         var canvas = document.getElementById("imageView");
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, 640, 480);
-        document.querySelector('.socketInfo').innerHTML = "The canvas has been cleared."
+        var dt = new Date();
+        var utcDate = dt.toUTCString();
+        document.querySelector('.socketInfo').innerHTML = "The canvas was cleared on: " + utcDate;
     });
     
-    socket.on('headcount', function(data) {
-        
-        if (activeUsers.indexOf(data.id) <= -1) {
-            activeUsers.push(data.id);
-        }   
-        
-        //document.querySelector('.activeUsers').innerHTML = activeUsers.length;
-    });
     
+    
+    socket.on('assignId', function(data) {
+        mySocketId = data.socketId;
+    });    
   
     
     
@@ -208,6 +214,3 @@ function leave_room() {
     });
 
 };	
-
-// vim:set spell spl=en fo=wan1croql tw=80 ts=2 sw=2 sts=2 sta et ai cin fenc=utf-8 ff=unix:
-
