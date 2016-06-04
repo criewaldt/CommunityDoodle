@@ -1,5 +1,5 @@
 # CommunityDoodle
-A simple flask-socketio web app with a shared canvas for doodling! Built with Flask, Flask-socketio, & JavaScript.
+A simple flask-socketio web app with a shared canvas for doodling! Built with Python 2.7, Flask, Flask-socketio, & JavaScript.
 
 Run the file 'run.py' to start the socketio server. Navigate to localhost/canvas with a compatible browser to start doodling on the canvas.
 
